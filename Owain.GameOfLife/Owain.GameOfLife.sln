@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.34804.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owain.GameOfLife", "Owain.GameOfLife.csproj", "{A21422EB-C406-43DA-8983-734D0348DF32}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owain.Euler22", "..\Owain.Euler22\Owain.Euler22.csproj", "{A64A7FA4-8574-4FCA-9218-E8C634F25F1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A21422EB-C406-43DA-8983-734D0348DF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A21422EB-C406-43DA-8983-734D0348DF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A21422EB-C406-43DA-8983-734D0348DF32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A64A7FA4-8574-4FCA-9218-E8C634F25F1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A64A7FA4-8574-4FCA-9218-E8C634F25F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A64A7FA4-8574-4FCA-9218-E8C634F25F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A64A7FA4-8574-4FCA-9218-E8C634F25F1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

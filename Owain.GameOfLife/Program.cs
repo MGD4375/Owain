@@ -25,7 +25,7 @@ bool[,] Randomise(bool[,] board)
             var foo = rand.Next(0, 10);
             Console.WriteLine(foo);
 
-            shadowBoard[rowIndex, colIndex] = foo > 5 ;
+            shadowBoard[rowIndex, colIndex] = foo > 5;
         }
     }
     return shadowBoard;
@@ -94,4 +94,3 @@ static int GetLiveNeighbourCount(bool[,] board, int rowIndex, int colIndex)
     return count;
 }
 
-Console.ReadKey();
