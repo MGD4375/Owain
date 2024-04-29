@@ -1,0 +1,104 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Todo</PageTitle>
+
+<h1>Owain's Great TODO list</h1>
+
+<form id="add-job" @onsubmit="AddJob">
+    <label>
+        new job
+        <input minlength="5" @bind="NewJobText" type="text" id="add-job-input" />
+
+    </label>
+    <button class="btn btn-primary">Add Job</button>
+</form>
+
+@foreach (var item in todoList)
+{
+    <form>
+
+        @if (item.State == State.Created)
+        {
+            <span>Foo</span>
+        }
+        else if (item.State == State.Started)
+        {
+            <span>Bar</span>
+            
+        }
+
+        <select @bind="item.State">
+            @foreach (var state in Enum.GetValues(typeof(State)))
+            {
+                <option value="@state">@state</option>
+            }
+           
+        </select>
+        <label>
+            <input @bind="item.IsCompleted" type="checkbox" />
+            <span class="job-text">@item.Title</span>
+        </label>
+    </form>
+  
+
+}
+<form id="remove-done-jobs" @onsubmit="RemoveDoneJobs">
+
+    <button class="btn btn-primary"> Remove Done jobs</button>
+</form>
+
+
+@code {
+    private enum State
+    {
+        Created,
+        Started,
+        Completed
+    }
+
+    private class Job
+    {
+
+        public string Title { get; set; }
+
+        public bool IsCompleted { get; set; }
+
+        public bool IsStarted { get; set; }
+
+        public State State { get; set; }
+
+
+        // string? ExtraInfo{ get;set }
+
+        public Job(string title, bool isCompleted)
+        {
+            Title = title;
+            IsCompleted = isCompleted;
+            State = State.Created;
+        }
+    }
+
+    private List<Job> todoList = new List<Job>() {
+        new Job("Walk the dog", true)
+    };
+
+    string? NewJobText;
+
+    private void AddJob()
+    {
+        //  TODO: don't let it add blank jobs
+
+
+        todoList.Add(new Job(NewJobText, false));
+        NewJobText = null;
+    }
+
+    private void RemoveDoneJobs()
+    {
+        todoList = todoList.Where(item => !item.IsCompleted).ToList();
+    }
+
+
+
+}
