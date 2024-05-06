@@ -1,0 +1,9 @@
+- [X] Layout
+- [X] Fonts and text
+- [X] Color information
+- [X] Splash section
+- [X] About
+- [X] Four Icons
+- [ ] Cow Poo
+- [ ] Call me
+- [ ] Responsive
