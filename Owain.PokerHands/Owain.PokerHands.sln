@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34804.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owain.PokerHands", "Owain.PokerHands.csproj", "{257FCBEB-304C-43AC-AE26-653B57D8EC8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owain.PokerHands.Test", "..\Owain.PokerHands.Test\Owain.PokerHands.Test.csproj", "{D22C1966-600A-47FA-8132-0AD279B90FD9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{257FCBEB-304C-43AC-AE26-653B57D8EC8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{257FCBEB-304C-43AC-AE26-653B57D8EC8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{257FCBEB-304C-43AC-AE26-653B57D8EC8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{257FCBEB-304C-43AC-AE26-653B57D8EC8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D22C1966-600A-47FA-8132-0AD279B90FD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D22C1966-600A-47FA-8132-0AD279B90FD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D22C1966-600A-47FA-8132-0AD279B90FD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D22C1966-600A-47FA-8132-0AD279B90FD9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {34CA3887-2259-4A88-9078-66AA6471475E}
+	EndGlobalSection
+EndGlobal
