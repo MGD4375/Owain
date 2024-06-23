@@ -1,4 +1,122 @@
-﻿//  load the file
+﻿
+
+using Poker;
+using System.ComponentModel.Design;
+
+public class Hand
+{
+    // Processors
+
+    RoyalFlushHandRule royalFlushRuleProcessor = new RoyalFlushHandRule();
+    StraightFlushHandRule straightFlushRuleProcessor = new StraightFlushHandRule();
+    FourOfAKindHandRule fourOfAKindProcessor = new FourOfAKindHandRule();
+    FullHouseHandRule fullHouseProcessor = new FullHouseHandRule();
+    FlushHandRule flushProcessor = new FlushHandRule();
+    StraightHandRule StraightProcessor = new StraightHandRule();
+    ThreeOfAKindHandRule threeOfAKindProcessor = new ThreeOfAKindHandRule();
+    TwoPairsHandRule twoPairsProcessor = new TwoPairsHandRule();
+    OnePairHandRule onePairProcessor = new OnePairHandRule();
+
+    //Properties
+
+    public List<Card> Cards;
+    public bool ValidHand;
+
+    public Score Score;
+    public Card HighCard;
+
+    //Constructor
+
+    public Hand(List<Card> fiveCards)
+    {
+        Cards = fiveCards;
+
+        if (Cards.Count == 5) { ValidHand = true; }
+        else { ValidHand = false; }
+
+        Score = GetScore(Cards);
+        HighCard = GetHighCard(Cards);
+
+    }
+
+    // Methods
+
+    Score GetScore(List<Card> hand)
+    {
+        //Console.WriteLine(hand);
+
+        if (royalFlushRuleProcessor.isTrue(hand))
+        {
+            Console.WriteLine("Royal Flush!");
+            return Score.RoyalFlush;
+        }
+        else if (straightFlushRuleProcessor.isTrue(hand))
+        {
+            Console.WriteLine("Straight Flush!");
+            return Score.StraightFlush;
+        }
+        else if (fourOfAKindProcessor.isTrue(hand))
+        {
+            Console.WriteLine("Four Of A Kind!");
+            return Score.FourOfAKind;
+
+        }
+        else if (fullHouseProcessor.isTrue(hand))
+        {
+            Console.WriteLine("Full House!");
+            return Score.FullHouse;
+
+        }
+        else if (flushProcessor.isTrue(hand))
+        {
+            Console.WriteLine("Flush!");
+            return Score.Flush;
+
+        }
+        else if (StraightProcessor.isTrue(hand))
+        {
+            Console.WriteLine("Straight!");
+            return Score.Straight;
+
+        }
+        else if (threeOfAKindProcessor.isTrue(hand))
+        {
+            Console.WriteLine("Three Of A Kind!");
+            return Score.ThreeOfAKind;
+
+        }
+        else if (twoPairsProcessor.isTrue(hand))
+        {
+            Console.WriteLine("Two Pairs!");
+            return Score.TwoPairs;
+
+        }
+        else if (onePairProcessor.isTrue(hand))
+        {
+            Console.WriteLine("A Pair!");
+            return Score.OnePair;
+
+        }
+        else
+        {
+            Console.WriteLine("High Card!");
+            return Score.HighCard;
+
+        }
+
+       
+    }
+
+    Card GetHighCard(List<Card> hand)
+    {
+        
+       Card bestCard = hand.OrderBy(card => card.Value).Last();
+
+        return bestCard; 
+    }
+
+}
+
 
 public class Card
 {
