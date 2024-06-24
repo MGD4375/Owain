@@ -57,6 +57,11 @@ public class StraightFlushHandRule : IHandRule
         var gapBetweenHighestAndLowest = hand.Max(it => it.Value) - hand.Min(it => it.Value);
         if (gapBetweenHighestAndLowest > 4)
         {
+            if (hasAnAce && hasATwo)
+            {
+                var ace = hand.First(it => it.Name == 'A');
+                ace.Value = 14;
+            }
             return false;
         }
 
@@ -163,21 +168,35 @@ public class StraightHandRule : IHandRule
     public bool isTrue(List<Card> hand)
     {
         var hasAnAce = hand.Any(it => it.Value == 14);
-
-        if(hasAnAce) 
-        { 
-            var hasLowAce = hand.Any(it => it.Value == 2);
-            if (hasLowAce) 
-            {
-                var ace = hand.First(it => it.Name == 'A');
-                ace.Value = 1;
-            }
+        var hasLowAce = hand.Any(it => it.Value == 2) && hasAnAce;
+      
+        if (hasLowAce) 
+        {
+            var ace = hand.First(it => it.Name == 'A');
+            ace.Value = 1;
         }
+        
 
         var isAStraight = hand.Max(it => it.Value) - hand.Min(it => it.Value) == hand.Count() - 1;
 
-        if (!isAStraight) { return false; }
-        else { return true; }
+        if (!isAStraight) 
+        {
+            if (hasLowAce)
+            {
+                var ace = hand.First(it => it.Name == 'A');
+                ace.Value = 14;
+            }
+            return false; 
+        }
+        else
+        {
+            if (hasLowAce)
+            {
+                var ace = hand.First(it => it.Name == 'A');
+                ace.Value = 14;
+            }
+            return true;
+        }
        
     }
 };
@@ -290,8 +309,9 @@ public class TieBreak
             {
                 case 1: { resolution = HighCard(); } break;
                 case 2: { resolution = OnePair(); } break;
+                case 3: { resolution = TwoPairs(); } break;
                 default: { Console.WriteLine(" No Resolution Method Found. "); } break;
-                //default: { throw new Exception( " No Resolution Method Found. "); }
+                //default: { throw new Exception(" No Resolution Method Found. "); }
 
             }
         }
@@ -303,67 +323,156 @@ public class TieBreak
     {
         var highCardDraw = PlayerOne.HighCard.Value == PlayerTwo.HighCard.Value;
 
+        if (!highCardDraw)
+        { 
+         if(PlayerOne.HighCard.Value > PlayerTwo.HighCard.Value) 
+            { return p1Wins; }
+         else { return p2Wins; }
+        }
+
         if (highCardDraw)
         {
-           PlayerOne.Cards.OrderBy(it => it.Value);
-           PlayerTwo.Cards.OrderBy(it => it.Value);
+            while(highCardDraw)
+            {
+                PlayerOne.Cards.Remove(PlayerOne.Cards.OrderBy(it=>it.Value).Last());
+                PlayerTwo.Cards.Remove(PlayerTwo.Cards.OrderBy(it => it.Value).Last());
 
-           while (highCardDraw) 
-           {
+                highCardDraw = PlayerOne.Cards.OrderBy(it => it.Value).Last().Value == PlayerTwo.Cards.OrderBy(it => it.Value).Last().Value;
+
+                if(!highCardDraw)
+                {
+                    if(PlayerOne.Cards.OrderBy(it => it.Value).Last().Value> PlayerTwo.Cards.OrderBy(it => it.Value).Last().Value)
+                    { return p1Wins;}
+                    else { return p2Wins; }
+                }
+
+                if(highCardDraw && PlayerOne.Cards.Count() == 0)
+                { break; }
+
+            }
             
-            PlayerOne.Cards.RemoveAt( PlayerOne.Cards.Count - 1);
-            PlayerTwo.Cards.RemoveAt(PlayerTwo.Cards.Count -1);
+                
+                
 
-            highCardDraw = PlayerOne.Cards.Last().Value == PlayerTwo.Cards.Last().Value;
-           }
-           
+            
         }
-      
-        if (PlayerOne.HighCard.Value>PlayerTwo.HighCard.Value)
-        { return p1Wins; }
-        else { return p2Wins; }
-        
-        
-
-        
-
+        return "Draw No Resalution Found";
     }
 
     private string OnePair()
     {
-        var playerOnePairValue = 0;
         
-        PlayerOne.Cards.OrderBy(it => it.Value);
-       
-        for (int i = 1; i < PlayerOne.Cards.Count; i++)
+        var playerOnePairValue = 0;
+
+        foreach(var card in PlayerOne.Cards)
         {
-            if (PlayerOne.Cards[(i - 1)] == PlayerOne.Cards[i])
-            { 
-                playerOnePairValue = PlayerOne.Cards[i].Value; 
-                i = PlayerOne.Cards.Count + 10;
+            var pairFound = PlayerOne.Cards.Count(it => it.Name == card.Name) == 1;
+
+            if(pairFound)
+            {  
+                playerOnePairValue=card.Value;
+                break;
             }
         }
 
         var playerTwoPairValue = 0;
 
-        PlayerTwo.Cards.OrderBy(it => it.Value);
-
-        for (int i = 1; i < PlayerTwo.Cards.Count; i++)
+        foreach (var card in PlayerTwo.Cards)
         {
-            if (PlayerTwo.Cards[(i - 1)] == PlayerTwo.Cards[i])
+            var pairFound = PlayerTwo.Cards.Count(it => it.Name == card.Name) == 1;
+
+            if (pairFound)
             {
-                playerTwoPairValue = PlayerTwo.Cards[i].Value;
-                i = PlayerTwo.Cards.Count + 10;
+                playerTwoPairValue = card.Value;
+                break;
             }
         }
 
         if (playerOnePairValue == playerTwoPairValue && playerOnePairValue == 0)
         { throw new Exception(" No Pair Found."); }
-        else if(playerOnePairValue == playerTwoPairValue)
+        else if (playerOnePairValue == playerTwoPairValue)
         { return HighCard(); }
-        else if(playerOnePairValue > playerTwoPairValue)
+        else if (playerOnePairValue > playerTwoPairValue)
         { return p1Wins; }
         else { return p2Wins; }
     }
+
+    private string TwoPairs()
+    {
+        List<int> player1Pairs = new List<int>();
+        List<int> player2Pairs = new List<int>();
+
+        foreach (var card in PlayerOne.Cards)
+        {
+            var duplicates = PlayerOne.Cards.Count(it => it.Name == card.Name);
+
+            if (duplicates>1)
+            {
+                if (duplicates > 2)
+                {
+                    player1Pairs.Add(card.Value);
+                    player1Pairs.Add(card.Value);
+                    break;
+                }
+                else if (duplicates == 2)
+                {
+                    if (!player1Pairs.Contains(card.Value))
+                    { player1Pairs.Add(card.Value); }
+                }
+            }
+        }
+
+        foreach (var card in PlayerTwo.Cards)
+        {
+            var duplicates = PlayerTwo.Cards.Count(it => it.Name == card.Name);
+
+            if (duplicates > 1)
+            {
+                if (duplicates > 2)
+                {
+                    player2Pairs.Add(card.Value);
+                    player2Pairs.Add(card.Value);
+                    break;
+                }
+                else if (duplicates == 2)
+                {
+                    if (!player2Pairs.Contains(card.Value))
+                    { player2Pairs.Add(card.Value); }
+                }
+            }
+        }
+
+        if(player1Pairs.Count != 2 || player2Pairs.Count != 2)
+        { throw new Exception("Could Not FindTwo Pairs"); }
+
+        player1Pairs.Sort();
+        player2Pairs.Sort();
+
+        var highPairDraw = player1Pairs[1] == player2Pairs[1];
+
+        if(!highPairDraw)
+        {
+            if (player1Pairs[1] > player2Pairs[1])
+            { return p1Wins; }
+            else { return p2Wins; }
+        }
+        else 
+        {
+            var lowPairDraw = player1Pairs[0] == player2Pairs[0];
+
+            if(!lowPairDraw)
+            {
+                if (player1Pairs[0] > player2Pairs[0])
+                { return p1Wins; }
+                else { return p2Wins; }
+            }
+            else { return HighCard(); }
+        
+        }
+    
+    }
+
+
+
 
 }

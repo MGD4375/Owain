@@ -1,18 +1,8 @@
 ﻿
 using Poker;
+using System.Xml;
 
-
-
-//var royalFlushRuleProcessor = new RoyalFlushHandRule();
-//var straightFlushRuleProcessor = new StraightFlushHandRule();
-//var fourOfAKindProcessor = new FourOfAKindHandRule();
-//var fullHouseProcessor = new FullHouseHandRule();
-//var flushProcessor = new FlushHandRule();
-//var StraightProcessor = new StraightHandRule();
-//var threeOfAKindProcessor = new ThreeOfAKindHandRule();
-//var twoPairsProcessor = new TwoPairsHandRule();
-//var onePairProcessor = new OnePairHandRule();
-////var highCardProcessor = new HighCardHandRule();
+RunTest();
 
 var roundNumber = 1;
 var p1Score = 0;
@@ -34,15 +24,8 @@ foreach (var line in lines)
     .GroupBy(it => it.index < 5)
     .ToList();
 
-    
-
     Hand playerOne = new Hand(hands[0].Select(it => it.Card).ToList());
     Hand playerTwo = new Hand(hands[1].Select(it => it.Card).ToList());
-
-    // rewright using hand class
-
-    //var leftHandScore = GetScore(leftHand.Select(it => it.Card).ToList());
-    //var rightHandScore = GetScore(rightHand.Select(it => it.Card).ToList());
 
     var roundResult = "Result Not Found.";
 
@@ -105,10 +88,39 @@ void DisplayResult()
     Console.WriteLine();
     Console.WriteLine("   .......... .......... .......... .......... ..........   ");
     Console.WriteLine();
+    Console.WriteLine($"         1000 hands played.   ||    Hands Unrisolved:  {1000-(p1Score+p2Score)}       ");
+    Console.WriteLine();
+    Console.WriteLine("   .......... .......... .......... .......... ..........   ");
+    Console.WriteLine();
+
 }
 
 
+void RunTest()
+{
+    //[InlineData("KD", "3C", "3S", "KS", "5H",     "KH", "AS", "3H", "KC", "3D", "playerTwo")] 
 
+    List<Card> p1Cards = new List<Card>();
+    p1Cards.Add(new Card("KD"));
+    p1Cards.Add(new Card("3C"));
+    p1Cards.Add(new Card("3S"));
+    p1Cards.Add(new Card("KS"));
+    p1Cards.Add(new Card("5H"));
+
+    List<Card> p2Cards = new List<Card>();
+    p2Cards.Add(new Card("AH"));
+    p2Cards.Add(new Card("AS"));
+    p2Cards.Add(new Card("3H"));
+    p2Cards.Add(new Card("AC"));
+    p2Cards.Add(new Card("AD"));
+
+    Hand p1 = new Hand(p1Cards);
+    Hand p2 = new Hand(p2Cards);
+    
+    TieBreak round = new TieBreak(p1,p2);
+    var result = round.Resolution;
+
+}
 
 
 
