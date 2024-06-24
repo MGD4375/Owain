@@ -1,24 +1,11 @@
 ﻿
 
 using Poker;
-using System.ComponentModel.Design;
+using System.ComponentModel.DataAnnotations;
 
-public class Hand
+public class Hand : IComparable<Hand>
 {
-    // Processors
-
-    RoyalFlushHandRule royalFlushRuleProcessor = new RoyalFlushHandRule();
-    StraightFlushHandRule straightFlushRuleProcessor = new StraightFlushHandRule();
-    FourOfAKindHandRule fourOfAKindProcessor = new FourOfAKindHandRule();
-    FullHouseHandRule fullHouseProcessor = new FullHouseHandRule();
-    FlushHandRule flushProcessor = new FlushHandRule();
-    StraightHandRule StraightProcessor = new StraightHandRule();
-    ThreeOfAKindHandRule threeOfAKindProcessor = new ThreeOfAKindHandRule();
-    TwoPairsHandRule twoPairsProcessor = new TwoPairsHandRule();
-    OnePairHandRule onePairProcessor = new OnePairHandRule();
-
     //Properties
-
     public List<Card> Cards;
     public bool ValidHand;
 
@@ -41,9 +28,17 @@ public class Hand
 
     // Methods
 
-    Score GetScore(List<Card> hand)
+    public static Score GetScore(List<Card> hand)
     {
-        //Console.WriteLine(hand);
+        RoyalFlushHandRule royalFlushRuleProcessor = new RoyalFlushHandRule();
+        StraightFlushHandRule straightFlushRuleProcessor = new StraightFlushHandRule();
+        FourOfAKindHandRule fourOfAKindProcessor = new FourOfAKindHandRule();
+        FullHouseHandRule fullHouseProcessor = new FullHouseHandRule();
+        FlushHandRule flushProcessor = new FlushHandRule();
+        StraightHandRule StraightProcessor = new StraightHandRule();
+        ThreeOfAKindHandRule threeOfAKindProcessor = new ThreeOfAKindHandRule();
+        TwoPairsHandRule twoPairsProcessor = new TwoPairsHandRule();
+        OnePairHandRule onePairProcessor = new OnePairHandRule();
 
         if (royalFlushRuleProcessor.isTrue(hand))
         {
@@ -104,23 +99,49 @@ public class Hand
 
         }
 
-       
     }
 
     Card GetHighCard(List<Card> hand)
     {
-        
-       Card bestCard = hand.OrderBy(card => card.Value).Last();
 
-        return bestCard; 
+        Card bestCard = hand.OrderBy(card => card.Value).Last();
+
+        return bestCard;
     }
+
+    public static int Compare(Hand first, Hand second)
+    {
+        var h1Score = GetScore(first.Cards);
+        var h2Score = GetScore(second.Cards);
+
+        return h1Score.CompareTo(h2Score);
+    }
+
+    public int CompareTo(Hand? other)
+    {
+        if (other == null)
+        {
+            return 1;
+        }
+
+        return Hand.Compare(this, other);
+    }
+
+    public static bool operator <(Hand first, Hand second)
+    {
+        return Hand.Compare(first, second) < 0;
+    }
+    public static bool operator >(Hand first, Hand second)
+    {
+        return Hand.Compare(first, second) > 0;
+    }
+
 
 }
 
 
 public class Card
 {
-
     private Card() { }
 
     public Card(string data)
@@ -154,10 +175,3 @@ public class Card
 }
 
 
-
-
-//  for each line
-//  get value of left 
-//  get value of right
-//  compare hands
-//  record winner 
