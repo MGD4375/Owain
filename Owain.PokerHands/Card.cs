@@ -30,75 +30,22 @@ public class Hand : IComparable<Hand>
 
     public static Score GetScore(List<Card> hand)
     {
-        RoyalFlushHandRule royalFlushRuleProcessor = new RoyalFlushHandRule();
-        StraightFlushHandRule straightFlushRuleProcessor = new StraightFlushHandRule();
-        FourOfAKindHandRule fourOfAKindProcessor = new FourOfAKindHandRule();
-        FullHouseHandRule fullHouseProcessor = new FullHouseHandRule();
-        FlushHandRule flushProcessor = new FlushHandRule();
-        StraightHandRule StraightProcessor = new StraightHandRule();
-        ThreeOfAKindHandRule threeOfAKindProcessor = new ThreeOfAKindHandRule();
-        TwoPairsHandRule twoPairsProcessor = new TwoPairsHandRule();
-        OnePairHandRule onePairProcessor = new OnePairHandRule();
-
-        if (royalFlushRuleProcessor.isTrue(hand))
+        var rules = new List<IHandRule>()
         {
-            Console.WriteLine("Royal Flush!");
-            return Score.RoyalFlush;
-        }
-        else if (straightFlushRuleProcessor.isTrue(hand))
-        {
-            Console.WriteLine("Straight Flush!");
-            return Score.StraightFlush;
-        }
-        else if (fourOfAKindProcessor.isTrue(hand))
-        {
-            Console.WriteLine("Four Of A Kind!");
-            return Score.FourOfAKind;
+            new RoyalFlushHandRule()          ,
+            new StraightFlushHandRule()     ,
+            new FourOfAKindHandRule()           ,
+            new FullHouseHandRule()                ,
+            new FlushHandRule()                           ,
+            new StraightHandRule()                 ,
+            new ThreeOfAKindHandRule()         ,
+            new TwoPairsHandRule()                      ,
+            new OnePairHandRule()
+        };
 
-        }
-        else if (fullHouseProcessor.isTrue(hand))
-        {
-            Console.WriteLine("Full House!");
-            return Score.FullHouse;
 
-        }
-        else if (flushProcessor.isTrue(hand))
-        {
-            Console.WriteLine("Flush!");
-            return Score.Flush;
-
-        }
-        else if (StraightProcessor.isTrue(hand))
-        {
-            Console.WriteLine("Straight!");
-            return Score.Straight;
-
-        }
-        else if (threeOfAKindProcessor.isTrue(hand))
-        {
-            Console.WriteLine("Three Of A Kind!");
-            return Score.ThreeOfAKind;
-
-        }
-        else if (twoPairsProcessor.isTrue(hand))
-        {
-            Console.WriteLine("Two Pairs!");
-            return Score.TwoPairs;
-
-        }
-        else if (onePairProcessor.isTrue(hand))
-        {
-            Console.WriteLine("A Pair!");
-            return Score.OnePair;
-
-        }
-        else
-        {
-            Console.WriteLine("High Card!");
-            return Score.HighCard;
-
-        }
-
+        return rules.Find(rule => rule.isTrue(hand))?.Score
+            ?? Score.HighCard;
     }
 
     Card GetHighCard(List<Card> hand)

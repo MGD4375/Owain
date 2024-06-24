@@ -5,6 +5,8 @@ using System.Threading;
 
 public class RoyalFlushHandRule : IHandRule
 {
+    public Score Score => Score.RoyalFlush;
+
     public bool isTrue(List<Card> hand)
     {
         var suit = hand[0].Suit;
@@ -34,6 +36,8 @@ public class RoyalFlushHandRule : IHandRule
 
 public class StraightFlushHandRule : IHandRule
 {
+    public Score Score => Score.StraightFlush;
+
     public bool isTrue(List<Card> hand)
     {
         var suit = hand[0].Suit;
@@ -71,6 +75,9 @@ public class StraightFlushHandRule : IHandRule
 
 public class FourOfAKindHandRule : IHandRule
 {
+
+    public Score Score => Score.FourOfAKind;
+
     public bool isTrue(List<Card> hand)
     {
         List<int> cardValues = new List<int>();
@@ -90,6 +97,9 @@ public class FourOfAKindHandRule : IHandRule
 
 public class FullHouseHandRule : IHandRule
 {
+
+    public Score Score => Score.FullHouse;
+
     public bool isTrue(List<Card> hand)
     {
         var hasThreeOfAKind = false;
@@ -144,6 +154,10 @@ public class FullHouseHandRule : IHandRule
 
 public class FlushHandRule : IHandRule
 {
+
+    public Score Score => Score.Flush;
+
+
     public bool isTrue(List<Card> hand)
     {
         var suit = hand[0].Suit;
@@ -161,6 +175,9 @@ public class FlushHandRule : IHandRule
 
 public class StraightHandRule : IHandRule
 {
+    public Score Score => Score.Straight;
+
+
     public bool isTrue(List<Card> hand)
     {
         var ace = hand.FirstOrDefault(it => it.Value == 14);
@@ -190,6 +207,9 @@ public class StraightHandRule : IHandRule
 
 public class ThreeOfAKindHandRule : IHandRule
 {
+    public Score Score => Score.ThreeOfAKind;
+
+
     public bool isTrue(List<Card> hand)
     {
         for (int i = 0; i < hand.Count; i++)
@@ -211,6 +231,8 @@ public class ThreeOfAKindHandRule : IHandRule
 
 public class TwoPairsHandRule : IHandRule
 {
+    public Score Score => Score.TwoPairs;
+
     public bool isTrue(List<Card> hand)
     {
         var pairCount = 0;
@@ -239,6 +261,8 @@ public class TwoPairsHandRule : IHandRule
 
 public class OnePairHandRule : IHandRule
 {
+    public Score Score => Score.OnePair;
+
     public bool isTrue(List<Card> hand)
     {
         return hand.Any(card => hand.Count(c2 => c2.Value == card.Value) > 1);
