@@ -141,15 +141,8 @@ namespace Owain.TieBreakResult.Test
 
     public class UnitTestTieBreakTest
     {
-
-
         [Theory]
-
-        [InlineData( "8C","TS","KC","9H","4S",    "7D","2S","5D","3S","AC",MagicStrings.PLAYER_TWO)]           //(High Ace)
-       
-
-
-
+        [InlineData("8C", "TS", "KC", "9H", "4S", "7D", "2S", "5D", "3S", "AC", MagicStrings.PLAYER_TWO)]           //(High Ace)
         public void PracticalTestOne
             (string data1, string data2, string data3, string data4, string data5,
              string data6, string data7, string data8, string data9, string data10,
@@ -183,6 +176,36 @@ namespace Owain.TieBreakResult.Test
             //  Assert 
             Assert.True(tieBreakResolution == expectedResult);
         }
+
+        [Theory]
+        [InlineData("6H", "5D", "7S", "5H", "9C", "9H", "JH", "8S", "TH", "7H")]           //Pair 5s : Straight 
+        public void PracticalTestTwo
+          (string data1, string data2, string data3, string data4, string data5,
+           string data6, string data7, string data8, string data9, string data10)
+        {
+            //  Arrange  
+
+            var cardList1 = new List<Card> {
+            new Card(data1),
+            new Card(data2),
+            new Card(data3),
+            new Card(data4),
+            new Card(data5) };
+
+            var cardList2 = new List<Card> {
+            new Card(data6),
+            new Card(data7),
+            new Card(data8),
+            new Card(data9),
+            new Card(data10) };
+
+            var hand1 = new Hand(cardList1);
+            var hand2 = new Hand(cardList2);
+
+            //  Assert 
+            Assert.True(hand1.Score < hand2.Score);
+        }
+
 
 
     }

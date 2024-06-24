@@ -163,36 +163,27 @@ public class StraightHandRule : IHandRule
 {
     public bool isTrue(List<Card> hand)
     {
-        var hasAnAce = hand.Any(it => it.Value == 14);
+        var ace = hand.FirstOrDefault(it => it.Value == 14);
+        var hasAnAce = ace != null;
         var hasLowAce = hand.Any(it => it.Value == 2) && hasAnAce;
 
-        if (hasLowAce)
+        if (hasAnAce && hasLowAce)
         {
-            var ace = hand.First(it => it.Name == 'A');
-            ace.Value = 1;
+            ace!.Value = 1;
         }
 
+        var c4 = hand.OrderBy(it => it.Value).ToList();
+        var c3 = c4.Take(hand.Count() - 1);
+        var c2 = c3.Select((card, index) => new { firstValue = card.Value, nextValue = c4[index + 1].Value });
+        var c1 = c2.Select(pair => pair.nextValue - pair.firstValue);
+        var isAStraight = c1.All(val => val == 1);
 
-        var isAStraight = hand.Max(it => it.Value) - hand.Min(it => it.Value) == hand.Count() - 1;
+        if (ace != null)
+        {
+            ace.Value = 14;
+        }
 
-        if (!isAStraight)
-        {
-            if (hasLowAce)
-            {
-                var ace = hand.First(it => it.Name == 'A');
-                ace.Value = 14;
-            }
-            return false;
-        }
-        else
-        {
-            if (hasLowAce)
-            {
-                var ace = hand.First(it => it.Name == 'A');
-                ace.Value = 14;
-            }
-            return true;
-        }
+        return isAStraight;
 
     }
 };
